@@ -1,6 +1,37 @@
-import streamlit as st
 
-st.title("🎈 My new app")
-st.write(
-    "Let's start building! For help and inspiration, head over to [docs.streamlit.io](https://docs.streamlit.io/)."
+import streamlit as st
+import pandas as pd
+import altair as alt
+import pydeck as pdk
+
+# Judul
+st.title("Dashboard Determinan Stunting Kecamatan Bogor Selatan")
+
+# Muat data
+data = pd.read_csv("data_stunting_bogor_selatan.csv")
+
+# Sidebar: Pilihan variabel
+variable = st.sidebar.selectbox(
+    "Pilih Faktor Determinan",
+    ["Air Bersih", "Riwayat Ibu Hamil", "Imunisasi", "Jamban Sehat", 
+     "BPJS/JKN", "Merokok Keluarga", "Penyakit Penyerta", "Kecacingan"]
 )
+
+# Tampilkan peta
+st.subheader("Peta Tematik Prevalensi Stunting")
+midpoint = (data['latitude'].mean(), data['longitude'].mean())
+st.map(data[['latitude', 'longitude', 'prevalensi_stunting']])
+
+# Grafik korelasi
+st.subheader(f"Korelasi antara {variable} dan Stunting")
+chart = alt.Chart(data).mark_circle(size=60).encode(
+    x=alt.X(variable), 
+    y='prevalensi_stunting',
+    tooltip=['kelurahan', variable, 'prevalensi_stunting']
+).interactive()
+st.altair_chart(chart, use_container_width=True)
+
+# Heatmap korelasi
+st.subheader("Heatmap Korelasi Semua Faktor")
+corr = data.drop(columns=['kelurahan','latitude','longitude']).corr()
+st.write(corr)
