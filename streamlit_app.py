@@ -3,6 +3,8 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 import pydeck as pdk
+import os
+print("Current working directory:", os.getcwd())
 
 # Judul
 st.title("Dashboard Determinan Stunting Kecamatan Bogor Selatan")
