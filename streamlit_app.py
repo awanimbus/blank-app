@@ -10,7 +10,9 @@ print("Current working directory:", os.getcwd())
 st.title("Dashboard Determinan Stunting Kecamatan Bogor Selatan")
 
 # Muat data
+url = 'https://raw.githubusercontent.com/awanimbus/blank-app/refs/heads/main/Cleaning2.csv'
 data = pd.read_csv("data_stunting_bogor_selatan.csv")
+
 
 # Sidebar: Pilihan variabel
 variable = st.sidebar.selectbox(
